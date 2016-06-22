@@ -17,25 +17,6 @@
 # limitations under the License.
 
 # This recipe installs OS packages which are required by all node types.
-
-# run apt-get update at the start of every Chef run if so configured
-if node['bcpc']['enabled']['always_update_package_lists'] then
-  bash "run-apt-get-update" do
-    user "root"
-    code "DEBIAN_FRONTEND=noninteractive apt-get update"
-  end
-end
-
-package 'patch'
-package 'sshpass'  # GitHub #112 -- required for nodessh.sh
-# logtail is used for some zabbix checks
-package 'logtail'
-
-# Remove spurious logging failures from this package
-package "powernap" do
-  action :remove
-end
-
 if node['bcpc']['enabled']['apt_dist_upgrade']
   include_recipe "apt::default"
   bash "perform-dist-upgrade" do
